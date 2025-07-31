@@ -150,29 +150,152 @@ SELECT FORMAT(1234567, '##-##-###')
 
 
 -- -> CHARINDEX: Descobre a posição de um determinado caractere dentro de um texto.
+/*
+	Estrutura Base:
+		SELECT CHARINDEX(string procurada, string base)
+*/
+-- Ex:
+SELECT CHARINDEX('Moreno', 'Raquel Moreno')
+
+
+
 -- -> SUBSTRING: Extrai alguns caracteres de dentro de um texto.
+/*
+	Estrutura Base:
+		SELECT SUBSTRING(string base, pos. inicial, qtd. caracteres)
+*/
+-- Ex:
+SELECT SUBSTRING('Raquel Moreno', 8, 6)
+
+-- Usando variável:
+DECLARE @varNome VARCHAR(100) = 'Raquel Moreno'
+
+SELECT SUBSTRING(@varNome, CHARINDEX(' ',@varNome) + 1, 100) AS 'Sobrenome'
+
+
+-- Funções para tirar espaços adicionais:
+-- -> TRIM: Retira espaços adicionais à esquerda e à direita do texto.
+/*
+	Estrutura Base:
+		SELECT TRIM(string)
+*/
+-- -> LTRIM: Retira espaços adicionais à esquerda do texto.
+/*
+	Estrutura Base:
+		SELECT LTRIM(string)
+*/
+-- -> RTRIM: Retira espaços adicionais à direita do texto.
+/*
+	Estrutura Base:
+		SELECT RTRIM(string)
+*/
+-- Ex:
+DECLARE @varCodigo VARCHAR(100) = '  ABC123   '
+
+SELECT
+	TRIM(@varCodigo) AS 'Trim',
+	LTRIM(@varCodigo) AS 'Ltrim',
+	RTRIM(@varCodigo) AS 'Rtrim'
+
+SELECT
+	DATALENGTH(TRIM(@varCodigo)) AS 'Qtd. caractere Trim',
+	DATALENGTH(LTRIM(@varCodigo)) AS 'Qtd. caractere Ltrim',
+	DATALENGTH(RTRIM(@varCodigo)) AS 'Qtd. caractere Rtrim'
 
 
 
+-- -> DAY, MONTH, YEAR: Descobrir o dia, mês ou ano de determinada data.
+DECLARE @varData DATE = '20200518'
 
-
--- -> TRIM, LTRIM, RTRIM:
-
-
-
-
--- -> DAY, MONDAY, YEAR e DATEFROMPARTS:
-
-
-
-
--- -> GETDATE, SYSDATETIME, DATEPART e DATENAME:
+SELECT 
+	DAY(@varData) AS 'Dia',
+	MONTH(@varData) AS 'Mês',
+	YEAR(@varData) AS 'Ano'
 
 
 
+-- -> DATEFROMPARTS: Obter uma data a partir de dia, mês e ano.
+DECLARE @varDia INT = 15,
+		@varMes INT = 6,
+		@varAno INT = 2017
 
--- -> DATEADD e DATEDIFF:
+SELECT DATEFROMPARTS(@varAno, @varMes, @varDia)
 
+
+
+-- -> GETDATE: Retorna a data/hora atual do sistema.
+/*
+	Estrutura Base:
+		SELECT GETDATE()
+*/
+-- EX:
+SELECT GETDATE()
+
+
+
+-- -> SYSDATETIME: Retorna a data/hora atual do sistema (mais preciso que a GETDATE).
+/*
+	Estrutura Base:
+		SELECT SYSDATETIME()
+*/
+-- EX:
+SELECT SYSDATETIME()
+
+
+
+-- -> DATEPART e DATENAME: Retornam informações (dia, mês, ano, semana, etc) de uma data.
+-- -> DATEPART: Retorna o restultado em formato de número.
+/*
+	Estrutura Base:
+		SELECT DATEPART([dia/mês/ano/semana/etc], data)
+*/
+-- -> DATENAME: 
+/*
+	Estrutura Base: Retorna o resultado em formato de texto
+		SELECT DATENAME([dia/mês/ano/semana/etc], data)
+*/
+-- EX:
+DECLARE @varData DATETIME = GETDATE()
+
+SELECT
+	DATENAME(DAY, @varData) AS 'Dia',
+	DATENAME(MONTH, @varData) AS 'Mês',
+	DATENAME(YEAR, @varData) AS 'Ano',
+	DATENAME(DAYOFYEAR, @varData) AS 'Dia do Ano'
+
+SELECT
+	DATEPART(DAY, @varData) AS 'Dia',
+	DATEPART(MONTH, @varData) AS 'Mês',
+	DATEPART(YEAR, @varData) AS 'Ano',
+	DATEPART(DAYOFYEAR, @varData) AS 'Dia do Ano'
+
+SELECT
+	SQL_VARIANT_PROPERTY(DATENAME(DAY, @varData), 'BaseType'),
+	SQL_VARIANT_PROPERTY(DATEPART(DAY, @varData), 'BaseType')
+
+
+
+-- -> DATEADD: Adiciona ou subtrai uma determinada quantidade de dias, meses ou anos a uma data.
+/*
+	Estrutura Base:
+		SELECT DATEADD([dia/mês/ano/semana/etc], qtd. dias somar/subtrair, data pra somar)
+*/
+-- EX:
+DECLARE @varData1 DATETIME = '2020/07/10',
+		@varData2 DATETIME = '2020/03/05',
+		@varData3 DATETIME = '2021/11/14'
+
+SELECT DATEADD(MONTH, -1, @varData1)
+
+
+
+-- -> DATEDIFF: Calcula a diferença entre duas datas.
+/*
+	Estrutura Base:
+		SELECT DATEDIFF([dia/mês/ano/semana/etc], data inicial, data final)
+*/
+-- EX:
+SELECT DATEDIFF(YEAR, @varData2, @varData3)
 
 
 
