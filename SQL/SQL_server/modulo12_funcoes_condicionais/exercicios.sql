@@ -111,22 +111,41 @@ GROUP BY ProductSubcategoryName
 
 
 -- -> EXERCÍCIO 5:
-SELECT * FROM
+SELECT * FROM DimCustomer
 
 SELECT
-	*
+	FirstName AS 'Nome',
+	Gender AS 'Sexo',
+	TotalChildren AS 'Qtd. Filhos',
+	EmailAddress AS 'E-mail',
+	CASE
+		WHEN Gender = 'F' AND TotalChildren > 0
+			THEN 'Sorteio Mãe do Ano'
+		WHEN Gender = 'M' AND TotalChildren > 0
+			THEN 'Sorteio Pai do Ano'
+		ELSE 'Caminhão de Prêmios'
+	END AS 'Ação de Marketing'
 FROM
-	
+	DimCustomer	
+WHERE FirstName IS NOT NULL AND Gender IS NOT NULL AND TotalChildren IS NOT NULL AND EmailAddress IS NOT NULL
 
 
 
 -- -> EXERCÍCIO 6:
-SELECT * FROM
+SELECT * FROM DimStore
+
+DECLARE @varDataAtual DATETIME = GETDATE()
 
 SELECT
-	*
+	StoreKey AS 'ID',
+	StoreName AS 'Loja',
+	CASE
+		WHEN CloseDate IS NULL
+			THEN DATEDIFF(DAY, OpenDate, @varDataAtual)
+		ELSE DATEDIFF(DAY, OpenDate, CloseDate)
+	END AS 'Tempo de Atividade'
 FROM
-	
+	DimStore
 
 
 
