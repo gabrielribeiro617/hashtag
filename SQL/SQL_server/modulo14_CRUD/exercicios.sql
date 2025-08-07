@@ -77,14 +77,35 @@ VALUES
 
 
 -- -> EXERCÍCIO 4:
+INSERT INTO dCliente(ID_Cliente, Nome_Cliente, Data_de_Nascimento)
+VALUES
+	(9, 'Gabriel Ribeiro', '14/10/2005')
+
+INSERT INTO dGerente(ID_Gerente, Nome_Gerente, Data_de_Contratacao, Salario)
+VALUES
+	(5, 'Maria Oliveira', '21/07/2020', 5500)
+
+INSERT INTO fContratos(ID_Contrato, Data_de_Assinatura, ID_Cliente, ID_Gerente, Valor_do_Contrato)
+VALUES
+	(11, '07/04/2019', 4, 1, 33000)
 
 
 
 -- -> EXERCÍCIO 5:
+UPDATE fContratos
+SET Data_de_Assinatura = '17/03/2019',
+	ID_Gerente = 2,
+	Valor_do_Contrato = 33500
+WHERE ID_Contrato = 4
+
+SELECT * FROM fContratos
 
 
 
 -- -> EXERCÍCIO 6:
+DELETE
+FROM fContratos
+WHERE ID_Contrato = 4
 
 
 
