@@ -35,21 +35,85 @@ WHERE UnitPrice >= (
 
 
 -- -> EXERCÍCIO 3:
-
-
-
+SELECT
+	*
+FROM
+	DimEmployee
+WHERE DepartmentName = (
+	SELECT
+		DepartmentName
+	FROM
+		DimEmployee
+	WHERE 
+		FirstName = 'Miguel'	
+		AND LastName = 'Severino'
+)
 
 
 
 -- -> EXERCÍCIO 4:
+select * from DimCustomer
+
+SELECT
+	CustomerKey,
+	FirstName,
+	LastName,
+	EmailAddress,
+	YearlyIncome
+FROM
+	DimCustomer
+WHERE 
+	YearlyIncome > (
+	SELECT
+		AVG(YearlyIncome)
+	FROM
+		DimCustomer
+	WHERE CustomerType = 'Person'
+)
 
 
 
 -- -> EXERCÍCIO 5:
+SELECT * FROM FactOnlineSales
+
+SELECT * FROM DimPromotion where PromotionName = 'Asian Holiday Promotion'
+
+SELECT
+	OnlineSalesKey,
+	CustomerKey,
+	PromotionKey
+FROM
+	FactOnlineSales
+WHERE PromotionKey = ANY(
+						SELECT
+							PromotionKey
+						FROM
+							DimPromotion
+						WHERE PromotionName = 'Asian Holiday Promotion'
+					)
 
 
 
 -- -> EXERCÍCIO 6:
+select * from DimCustomer
+
+SELECT TOP(100)
+	CustomerKey,
+	CompanyName
+FROM
+	DimCustomer
+WHERE CustomerKey = (
+					SELECT
+						CustomerKey
+					FROM
+						FactOnlineSales
+					WHERE 
+						COUNT(OnlineSalesKey) >= 3000
+					GROUP BY ProductKey
+
+
+
+
 
 
 
