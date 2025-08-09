@@ -95,41 +95,94 @@ WHERE PromotionKey = ANY(
 
 
 -- -> EXERCÍCIO 6:
-select * from DimCustomer
-
-SELECT TOP(100)
+SELECT
 	CustomerKey,
 	CompanyName
 FROM
 	DimCustomer
-WHERE CustomerKey = (
+WHERE CustomerKey IN (
 					SELECT
 						CustomerKey
 					FROM
 						FactOnlineSales
-					WHERE 
-						COUNT(OnlineSalesKey) >= 3000
-					GROUP BY ProductKey
-
-
-
-
+					GROUP BY CustomerKey, ProductKey
+					HAVING COUNT(*) >= 3000
+	)
 
 
 
 -- -> EXERCÍCIO 7:
+SELECT
+	ProductKey,
+	ProductName,
+	BrandName,
+	UnitPrice,
+	(SELECT AVG(UnitPrice) FROM DimProduct) AS 'Média de UnitPrice'
+FROM
+	DimProduct
 
 
 
 -- -> EXERCÍCIO 8:
+SELECT
+	MAX(Quantidade) AS 'Máximo',
+	MIN(Quantidade) AS 'Mínimo',
+	AVG(Quantidade) AS 'Média'
+FROM
+	(
+		SELECT
+			BrandName,
+			COUNT(*) AS 'Quantidade'
+		FROM
+			DimProduct
+		GROUP BY BrandName
+	) AS T
 
 
 
 -- -> EXERCÍCIO 9:
+WITH CTE_QtdProdutosPorMarca AS (
+	SELECT
+		BrandName AS 'Marca',
+		COUNT(*) AS 'Quantidade'
+	FROM
+		DimProduct
+	GROUP BY BrandName
+)
+
+SELECT MAX(Quantidade) AS 'Máxima' FROM CTE_QtdProdutosPorMarca
 
 
 
 -- -> EXERCÍCIO 10:
+GO
+WITH CTE_ProdutosAdventureWorks AS (
+	SELECT
+		ProductKey,
+		ProductName,
+		ProductSubcategoryKey,
+		BrandName,
+		UnitPrice
+	FROM
+		DimProduct
+	WHERE BrandName = 'Adventure Works'
+),
+CTE_CategoriaTelevisionERadio AS (
+	SELECT
+		ProductSubcategoryKey,
+		ProductSubcategoryName
+	FROM
+		DimProductSubcategory
+	WHERE ProductSubcategoryName IN ('Televisions', 'Monitors')
+)
 
+
+SELECT
+	*
+FROM
+	CTE_ProdutosAdventureWorks
+LEFT JOIN CTE_CategoriaTelevisionERadio
+	ON CTE_ProdutosAdventureWorks.ProductSubcategoryKey = CTE_CategoriaTelevisionERadio.ProductSubcategoryKey
+GO
 
 
